@@ -55,7 +55,7 @@ Unlike EIP-4361 or legacy Solana messages, dapps do not need to construct a mess
 
 - `domain`: Optional EIP-4361 domain requesting the sign-in. If not provided, the wallet must determine the domain to include in the message.
 - `address`: Optional Solana address performing the sign-in. The address is case-sensitive. If not provided, the wallet must determine the Address to include in the message.
-- `statement`: Optional EIP-4361 Statement. The statement is a human readable string and should not have new-line characters (`\n`). If not provided, the wallet must not include Statement in the message.
+- `statement`: Optional EIP-4361 Statement. The statement is a human-readable string and should not have new-line characters (`\n`). If not provided, the wallet must not include Statement in the message.
 - `uri`: Optional EIP-4361 URI. The URL that is requesting the sign-in. If not provided, the wallet must not include URI in the message.
 - `version`: Optional EIP-4361 version. If not provided, the wallet must not include Version in the message.
 - `chainId`: Optional EIP-4361 Chain ID. The chainId can be one of the following: `mainnet`, `testnet`, `devnet`, `localnet`, `solana:mainnet`, `solana:testnet`, `solana:devnet`. If not provided, the wallet must not include Chain ID in the message.
@@ -63,7 +63,7 @@ Unlike EIP-4361 or legacy Solana messages, dapps do not need to construct a mess
 - `issuedAt`: Optional ISO 8601 datetime string. This represents the time at which the sign-in request was issued to the wallet. Note: For Phantom, issuedAt has a threshold and it should be within +- 10 minutes from the timestamp at which verification is taking place. If not provided, the wallet must not include Issued At in the message.
 - `expirationTime`: Optional ISO 8601 datetime string. This represents the time at which the sign-in request should expire. If not provided, the wallet must not include Expiration Time in the message.
 - `notBefore`: Optional ISO 8601 datetime string. This represents the time at which the sign-in request becomes valid. If not provided, the wallet must not include Not Before in the message.
-- `requestId`: Optional EIP-4361 Request ID. In addition to using `nonce` to avoid replay attacks, dapps can also choose to include a unique signature in the `requestId` . Once the wallet returns the signed message, dapps can then verify this signature against the state to add an additional, strong layer of security. If not provided, the wallet must not include Request ID in the message.
+- `requestId`: Optional EIP-4361 Request ID. In addition to using `nonce` to avoid replay attacks, dapps can also choose to include a unique signature in the `requestId` . Once the wallet returns the signed message, dapps can then verify this signature against the state to add a strong layer of security. If not provided, the wallet must not include Request ID in the message.
 - `resources`: Optional EIP-4361 Resources. Usually a list of references in the form of URIs that the dapp wants the user to be aware of. These URIs should be separated by `\n-`, ie, URIs in new lines starting with the character `-`. If not provided, the wallet must not include Resources in the message.
 
 ### Sign-In Output Fields
@@ -312,14 +312,14 @@ When the connecting wallet does not support the `signIn` feature, `autoSignIn` r
 
 ### Overview
 
-1. The Wallet receieves the `signIn` request from the dapp
+1. The Wallet receives the `signIn` request from the dapp
 2. The Wallet constructs a message in the ABNF format using the message parameter strings
 3. The constructed message is parsed to check if the construction follows the standard ABNF format and is consistent with the spec
 4. If parsing fails, the user is not shown the `signIn` prompt and the wallet throws an RPC error
 5. Else, the parsed parameters are verified to follow the correct format and predefined thresholds
 6. If verification is successful, the Wallet prompts the user with the `signIn` request, showing the message statement and the advanced details hidden by default. No errors are shown
 7. If verification fails, the user is still prompted, but is shown the verification errors
-8. In both cases, the user is able to either accept the signIn request or decline the request
+8. In both cases, the user can either accept the signIn request or decline the request
 9. In case the user accepts the request, the wallet connects the user to the Dapp and signs the constructed message
 10. The Wallet returns the constructed message, the message signature and the public address of the connected account back to the Dapp
 
@@ -361,7 +361,7 @@ export class PhantomWallet implements Wallet {
 
 Once we have the provider method and the Wallet-Standard wrapper, we can start with the message construction. The message should be constructed following the [ABNF Message format](#abnf-message-format). The construction follows the same algorithm implemented in the [`createSignInMessageText` method](https://github.com/solana-labs/wallet-standard/blob/9d17ab038fb4c39fa08378571de40ea5ad593d46/packages/core/util/src/signIn.ts#L121) of the `@solana/wallet-standard-utils` package.
 
-One thing to note is that although the `domain` and the `address` are not mandatory fields for the `signInInput`, they are mandatory for the constucted message. If these fields are not present in the input, they need to be extracted by the wallet using the requesting domain and address.
+One thing to note is that although the `domain` and the `address` are not mandatory fields for the `signInInput`, they are mandatory for the constructed message. If these fields are not present in the input, they need to be extracted by the wallet using the requesting domain and address.
 
 ```tsx
 export function createSignInMessageText(input: SolanaSignInInput): string {
@@ -415,7 +415,7 @@ export function createSignInMessageText(input: SolanaSignInInput): string {
 
 Message parsing can be made easy and manageable using an ABNF Parser Generator like apg-js: [https://github.com/ldthomas/apg-js](https://github.com/ldthomas/apg-js).
 
-Wallets can create BNF grammar files and the `apg-js` packages recursively generates parsers for the constructed message.
+Wallets can create BNF grammar files and the `apg-js` packages recursively generate parsers for the constructed message.
 
 The grammar for SIWS ABNF messages follows [this](#abnf-message-format) format.
 
@@ -497,4 +497,4 @@ export function verify(data: SolanaSignInInput, opts: VerificationOptions) {
 You can find the source code for the example implementation [here](https://github.com/phantom/sign-in-with-solana/tree/main/example-dapp).
 
 You can play around with SIWS here: [https://siws.vercel.app/](https://siws.vercel.app/).
-Note: Currently SIWS is only supported on Phantom extension (version >=23.11.0)
+Note: Currently SIWS is only supported on the Phantom extension (version >=23.11.0)
